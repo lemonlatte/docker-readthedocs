@@ -12,15 +12,12 @@ RUN apt-get -qqy install \
     texlive texlive-latex-extra language-pack-en \
     unzip python-dev git
 
-RUN mkdir -p $APPDIR && cd $APPDIR && \
-    wget -q --no-check-certificate https://github.com/rtfd/readthedocs.org/archive/master.zip && \
-    unzip master.zip >/dev/null 2>/dev/null && rm -f master.zip && \
-    mv readthedocs.org-master/* readthedocs.org-master/.??* . && \
-    rmdir readthedocs.org-master
+RUN mkdir -p $APPDIR && cd /tmp && \
+    wget -q --no-check-certificate https://github.com/rtfd/readthedocs.org/archive/master.zip
 
 ADD config /
 RUN /bin/rtd-install.sh
 
 EXPOSE 8000
-ENTRYPOINT ["/bin/rtd-start.sh"]
-CMD [""]
+VOLUME ["/app"]
+CMD ["/bin/rtd-start.sh"]
